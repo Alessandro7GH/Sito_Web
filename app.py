@@ -21,7 +21,10 @@ from data.products import (
 )
 
 app = Flask(__name__)
-init_db()
+
+# Inizializzazione automatica del database all'avvio su Render
+with app.app_context():
+    database.init_db()
 
 def check_and_update_base_price():
     """Imposta il prezzo base (riferimento di mezzanotte) se è iniziato un nuovo giorno."""
@@ -239,7 +242,6 @@ def check_achievements(conn, uid):
     user = database.get_user(conn, uid)
     cash = user["cash"]
 
-    # calcolo net worth veloce
     state = compute_state(conn, uid)
     net = state["net_worth"]
 
@@ -256,7 +258,6 @@ def check_achievements(conn, uid):
         if a:
             new.append(a)
 
-    # oggetti inutili
     useless_rows = conn.execute(
         "SELECT category, price FROM inventory WHERE user_id=?", (uid,)
     ).fetchall()
@@ -271,7 +272,6 @@ def check_achievements(conn, uid):
         if a:
             new.append(a)
 
-    # collezionista: 50 oggetti diversi
     distinct = conn.execute(
         "SELECT COUNT(DISTINCT product_id) AS n FROM inventory WHERE user_id=?", (uid,)
     ).fetchone()["n"]
@@ -280,7 +280,6 @@ def check_achievements(conn, uid):
         if a:
             new.append(a)
 
-    # capitalista: 10% di un'azienda
     for inv in conn.execute("SELECT * FROM investments WHERE user_id=?", (uid,)).fetchall():
         comp = COMPANIES_BY_ID.get(inv["company_id"])
         if comp and inv["shares"] >= 0.10 * comp["shares_outstanding"]:
@@ -366,7 +365,6 @@ def api_buy():
 
     cash = user["cash"]
     price = float(product["price"])
-    # Il debito è consentito: puoi comprare andando in negativo.
     conn.execute("UPDATE users SET cash = cash - ? WHERE id = ?", (price, uid))
     conn.execute(
         "INSERT INTO inventory (user_id, product_id, name, price, category, ts) VALUES (?,?,?,?,?,?)",
@@ -555,7 +553,6 @@ def api_tick():
 
     events = []
 
-    # 1) Random walk dei prezzi
     for comp in COMPANIES:
         cid = comp["id"]
         row = conn.execute(
@@ -570,7 +567,6 @@ def api_tick():
             (new, change, uid, cid),
         )
 
-    # 2) Evento di mercato (raro)
     if random.random() < 0.22:
         comp = random.choice(COMPANIES)
         ev = random.choice(comp["events"])
@@ -588,7 +584,6 @@ def api_tick():
             {"type": "market", "company": comp["name"], "text": ev["text"], "pct": ev["pct"]}
         )
 
-    # 3) Entrate dalle aziende possedute
     owned = conn.execute(
         "SELECT company_id FROM companies_owned WHERE user_id=?", (uid,)
     ).fetchall()
@@ -606,7 +601,6 @@ def api_tick():
                     {"type": "income", "text": f"{comp['name']} ti ha fruttato denaro.", "amount": income}
                 )
 
-    # 4) Interessi sul debito
     user = database.get_user(conn, uid)
     if user["cash"] < 0 and random.random() < 0.5:
         interest = round(abs(user["cash"]) * 0.02, 2)
@@ -615,7 +609,6 @@ def api_tick():
             add_transaction(conn, uid, "Gli interessi hanno deciso di esistere.", -interest)
             events.append({"type": "interest", "text": "Gli interessi hanno deciso di esistere.", "amount": -interest})
 
-    # 5) Evento casuale del giocatore (raro)
     if random.random() < 0.15:
         has_company = len(owned) > 0
         pool = [e for e in PLAYER_EVENTS if not e.get("needs_company") or has_company]
@@ -633,10 +626,6 @@ def api_tick():
     return jsonify({"ok": True, "events": events, "new_achievements": new_ach, "state": state})
 
 
-if __name__ == "__main__":
-    init_db()
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
 @app.route('/api/stocks')
 def get_stocks():
     """Restituisce le azioni con la variazione calcolata rispetto alla mezzanotte."""
@@ -652,7 +641,6 @@ def get_stocks():
         c_price = row['current_price']
         b_price = row['base_price'] if row['base_price'] > 0 else c_price
         
-        # Percentuale rispetto al prezzo di inizio giornata (mezzanotte)
         pct_change = ((c_price - b_price) / b_price) * 100.0
 
         stocks.append({
@@ -664,6 +652,7 @@ def get_stocks():
         })
 
     return jsonify(stocks)
+
 
 @app.route('/api/stock_history/<symbol>')
 def get_stock_history(symbol):
@@ -695,3 +684,7 @@ def get_stock_history(symbol):
         'labels': labels,
         'prices': prices
     })
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
