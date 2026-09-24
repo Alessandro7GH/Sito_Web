@@ -1,9 +1,3 @@
-"""
-Gestione database SQLite per SOMETHING BANK.
-
-Crea automaticamente il database e tutte le tabelle al primo avvio.
-"""
-
 import sqlite3
 import os
 
@@ -42,7 +36,7 @@ def init_db():
         )
     """)
 
-    # Tabella Storico Azioni con controllo di sicurezza per la colonna 'ts'
+    # Tabella Storico Azioni
     cur.execute("""
         CREATE TABLE IF NOT EXISTS stock_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,8 +45,31 @@ def init_db():
             ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
-    
-    # Controllo extra se la tabella esisteva già senza colonna ts
+
+    # Tabella Inventario
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS inventory (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            symbol TEXT NOT NULL,
+            shares INTEGER NOT NULL DEFAULT 0,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    """)
+
+    # Tabella Obiettivi / Achievements
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS achievements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT,
+            achieved INTEGER DEFAULT 0,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        )
+    """)
+
+    # Controllo di sicurezza per la colonna 'ts' se la tabella stock_history esisteva già senza di essa
     try:
         cur.execute("SELECT ts FROM stock_history LIMIT 1")
     except sqlite3.OperationalError:
@@ -60,10 +77,6 @@ def init_db():
 
     conn.commit()
     conn.close()
-
-if __name__ == "__main__":
-    init_db()
-    print("Database inizializzato con successo.")
 
 def create_or_get_user(username):
     conn = get_conn()
@@ -83,3 +96,7 @@ def get_user(conn, uid):
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE id = ?", (uid,))
     return cur.fetchone()
+
+if __name__ == "__main__":
+    init_db()
+    print("Database inizializzato con successo.")
