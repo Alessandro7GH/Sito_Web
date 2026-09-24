@@ -329,7 +329,7 @@ def api_register():
     name = (data.get("name") or "").strip()[:40]
     if not name:
         return jsonify({"error": "Serve un nome."}), 400
-    uid = database.create_user(name)
+    uid = database.create_or_get_user(name)
     conn = database.get_conn()
     state = compute_state(conn, uid)
     conn.close()
