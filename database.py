@@ -17,7 +17,7 @@ def get_conn():
 def init_db():
     conn = get_conn()
     cur = conn.cursor()
-
+    
     # Tabella Utenti
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -37,83 +37,22 @@ def init_db():
             user_id INTEGER NOT NULL,
             type TEXT NOT NULL,
             amount REAL NOT NULL,
-            description TEXT,
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(user_id) REFERENCES users(id)
         )
     """)
 
-    # Tabella Inventario Oggetti
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS inventory (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            item_name TEXT NOT NULL,
-            quantity INTEGER NOT NULL DEFAULT 1,
-            buy_price REAL NOT NULL,
-            FOREIGN KEY(user_id) REFERENCES users(id)
-        )
-    """)
-
-    # Tabella Investimenti / Azioni Possedute
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS investments (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            stock_symbol TEXT NOT NULL,
-            shares REAL NOT NULL DEFAULT 0,
-            avg_buy_price REAL NOT NULL DEFAULT 0,
-            FOREIGN KEY(user_id) REFERENCES users(id)
-        )
-    """)
-
-    # Tabella Mercato Azionario (con Prezzo Base del Giorno)
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS market (
-            symbol TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            current_price REAL NOT NULL,
-            base_price REAL NOT NULL DEFAULT 0.0,
-            last_reset_date TEXT
-        )
-    """)
-
-    # Tabella Storico Prezzi per il Grafico
+    # Tabella Storico Azioni con controllo di sicurezza per la colonna 'ts'
     cur.execute("""
         CREATE TABLE IF NOT EXISTS stock_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             symbol TEXT NOT NULL,
             price REAL NOT NULL,
-            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(symbol) REFERENCES market(symbol)
+            ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
-
-    # Tabella Aziende Possedute dagli Utenti
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS companies_owned (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            company_name TEXT NOT NULL,
-            level INTEGER DEFAULT 1,
-            hourly_revenue REAL DEFAULT 10.0,
-            FOREIGN KEY(user_id) REFERENCES users(id)
-        )
-    """)
-
-    # Tabella Obiettivi / Achievements
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS achievements (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            title TEXT NOT NULL,
-            description TEXT,
-            achieved INTEGER DEFAULT 0,
-            FOREIGN KEY(user_id) REFERENCES users(id)
-        )
-    """)
-
-# Controllo di sicurezza per aggiungere la colonna 'ts' se manca nel database esistente
+    
+    # Controllo extra se la tabella esisteva già senza colonna ts
     try:
         cur.execute("SELECT ts FROM stock_history LIMIT 1")
     except sqlite3.OperationalError:
