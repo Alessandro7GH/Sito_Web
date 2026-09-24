@@ -133,3 +133,8 @@ def create_or_get_user(username):
         uid = cur.lastrowid
     conn.close()
     return uid
+
+def get_user(conn, uid):
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE id = ?", (uid,))
+    return cur.fetchone()
