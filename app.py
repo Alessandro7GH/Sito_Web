@@ -6,10 +6,10 @@ Avvio:  python app.py   ->   http://127.0.0.1:5000
 
 import random
 import time
-
+from datetime import datetime
 from flask import Flask, jsonify, render_template, request
 
-import database
+from database import get_conn, init_db
 from data.companies import COMPANIES, COMPANIES_BY_ID
 from data.products import (
     CATEGORIES,
@@ -18,8 +18,6 @@ from data.products import (
     PROPERTY_CATEGORIES,
     USELESS_CATEGORIES,
 )
-
-app = Flask(__name__)
 
 app = Flask(__name__)
 init_db()
