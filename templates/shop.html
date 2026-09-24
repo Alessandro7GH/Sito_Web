@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPENDI — SOMETHING BANK</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body data-page="shop">
+
+  <header class="topbar">
+    <a href="/bank" class="link-btn" data-testid="back-bank">← Indietro</a>
+    <div class="balance-pill" data-testid="shop-balance" id="shop-balance">€0</div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title fade-in" id="shop-title">Cosa vuoi comprare?</h1>
+
+    <nav class="cat-nav" id="cat-nav" data-testid="category-nav"></nav>
+
+    <div class="product-grid" id="product-grid" data-testid="product-grid"></div>
+  </main>
+
+  <div id="toast" class="toast hidden" data-testid="toast"></div>
+  <div id="event-toast" class="event-toast hidden" data-testid="event-toast"></div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

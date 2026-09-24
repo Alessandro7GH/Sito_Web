@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOMETHING BANK</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body data-page="bank">
+
+  <header class="topbar">
+    <div class="brand" data-testid="bank-brand">SOMETHING BANK</div>
+    <button class="link-btn" id="reset-btn" data-testid="reset-button">Ricomincia</button>
+  </header>
+
+  <main class="container">
+    <div class="account-head fade-in">
+      <p class="account-name" data-testid="account-name" id="account-name">—</p>
+      <p class="account-label">Patrimonio</p>
+      <h1 class="networth" data-testid="networth" id="networth">€0,00</h1>
+    </div>
+
+    <div class="stat-grid" data-testid="stat-grid">
+      <div class="stat"><span>Contanti</span><b id="s-cash">€0</b></div>
+      <div class="stat"><span>Investimenti</span><b id="s-stocks">€0</b></div>
+      <div class="stat"><span>Proprietà</span><b id="s-property">€0</b></div>
+      <div class="stat"><span>Oggetti</span><b id="s-objects">€0</b></div>
+      <div class="stat"><span>Aziende</span><b id="s-companies">€0</b></div>
+      <div class="stat"><span>Debiti</span><b id="s-debt" class="neg">€0</b></div>
+    </div>
+
+    <div class="main-actions">
+      <a href="/shop" class="big-btn" data-testid="nav-shop">SPENDI</a>
+      <a href="/investments" class="big-btn" data-testid="nav-investments">INVESTI</a>
+      <a href="/portfolio" class="big-btn" data-testid="nav-portfolio">PORTAFOGLIO</a>
+    </div>
+
+    <section class="history-block">
+      <h2 class="section-title">Cronologia</h2>
+      <ul class="history-list" id="history-list" data-testid="history-list"></ul>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden" data-testid="toast"></div>
+  <div id="event-toast" class="event-toast hidden" data-testid="event-toast"></div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

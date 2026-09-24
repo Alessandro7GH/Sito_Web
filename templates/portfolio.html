@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PORTAFOGLIO — SOMETHING BANK</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body data-page="portfolio">
+
+  <header class="topbar">
+    <a href="/bank" class="link-btn" data-testid="back-bank">← Indietro</a>
+    <div class="brand small">SOMETHING BANK</div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title fade-in">Il tuo patrimonio</h1>
+
+    <div class="wealth-rows" data-testid="wealth-rows">
+      <div class="wrow"><span>Contanti</span><b id="w-cash">€0</b></div>
+      <div class="wrow"><span>Azioni</span><b id="w-stocks">€0</b></div>
+      <div class="wrow"><span>Aziende</span><b id="w-companies">€0</b></div>
+      <div class="wrow"><span>Case</span><b id="w-property">€0</b></div>
+      <div class="wrow"><span>Oggetti</span><b id="w-objects">€0</b></div>
+      <div class="wrow"><span>Debiti</span><b id="w-debt" class="neg">€0</b></div>
+    </div>
+
+    <div class="networth-block">
+      <p class="account-label">Patrimonio netto</p>
+      <h2 class="networth big" data-testid="pf-networth" id="pf-networth">€0,00</h2>
+    </div>
+
+    <section class="pf-section">
+      <h2 class="section-title">I tuoi oggetti</h2>
+      <div class="items-wrap" id="items-wrap" data-testid="items-wrap"></div>
+    </section>
+
+    <section class="pf-section">
+      <h2 class="section-title">Achievement</h2>
+      <div class="ach-grid" id="ach-grid" data-testid="ach-grid"></div>
+    </section>
+  </main>
+
+  <div id="event-toast" class="event-toast hidden" data-testid="event-toast"></div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

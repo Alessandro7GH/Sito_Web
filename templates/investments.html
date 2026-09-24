@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INVESTI — SOMETHING BANK</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body data-page="investments">
+
+  <header class="topbar">
+    <a href="/bank" class="link-btn" data-testid="back-bank">← Indietro</a>
+    <div class="balance-pill" data-testid="inv-balance" id="inv-balance">€0</div>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title fade-in">Investi</h1>
+    <p class="subtle">I prezzi si muovono da soli. Buona fortuna.</p>
+
+    <div class="market-list" id="market-list" data-testid="market-list"></div>
+  </main>
+
+  <div id="toast" class="toast hidden" data-testid="toast"></div>
+  <div id="event-toast" class="event-toast hidden" data-testid="event-toast"></div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
