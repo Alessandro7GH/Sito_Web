@@ -119,3 +119,17 @@ def init_db():
 if __name__ == "__main__":
     init_db()
     print("Database inizializzato con successo.")
+
+def create_or_get_user(username):
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM users WHERE username = ?", (username,))
+    row = cur.fetchone()
+    if row:
+        uid = row["id"]
+    else:
+        cur.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (username, ""))
+        conn.commit()
+        uid = cur.lastrowid
+    conn.close()
+    return uid
