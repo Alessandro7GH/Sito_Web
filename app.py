@@ -153,7 +153,7 @@ def compute_state(conn, uid):
             }
         )
 
-    net_worth = cash + stocks_value + companies_value + property_value + objects_value
+    net_worth = cash + stocks_value + companies_value + property_value
 
     # Cronologia
     tx_rows = conn.execute(
