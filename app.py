@@ -10,6 +10,7 @@ from datetime import datetime
 from flask import Flask, jsonify, render_template, request
 
 from database import get_conn, init_db
+import database
 from data.companies import COMPANIES, COMPANIES_BY_ID
 from data.products import (
     CATEGORIES,
@@ -633,7 +634,7 @@ def api_tick():
 
 
 if __name__ == "__main__":
-    database.init_db()
+    init_db()
     app.run(host="0.0.0.0", port=5000, debug=True)
 
 @app.route('/api/stocks')
