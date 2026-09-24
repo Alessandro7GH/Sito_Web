@@ -21,6 +21,42 @@ from data.products import (
 
 app = Flask(__name__)
 
+app = Flask(__name__)
+init_db()
+
+def check_and_update_base_price():
+    """Imposta il prezzo base (riferimento di mezzanotte) se è iniziato un nuovo giorno."""
+    conn = get_conn()
+    cur = conn.cursor()
+    today_str = datetime.now().strftime("%Y-%m-%d")
+
+    cur.execute("SELECT symbol, current_price, base_price, last_reset_date FROM market")
+    stocks = cur.fetchall()
+
+    for stock in stocks:
+        symbol = stock['symbol']
+        curr_p = stock['current_price']
+        last_date = stock['last_reset_date']
+        base_p = stock['base_price']
+
+        if last_date != today_str or base_p == 0.0:
+            cur.execute("""
+                UPDATE market 
+                SET base_price = ?, last_reset_date = ? 
+                WHERE symbol = ?
+            """, (curr_p, today_str, symbol))
+
+    conn.commit()
+    conn.close()
+
+def record_stock_price(symbol, price):
+    """Salva un punto nello storico ogni volta che il prezzo cambia."""
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO stock_history (symbol, price) VALUES (?, ?)", (symbol, price))
+    conn.commit()
+    conn.close()
+
 # ---------------------------------------------------------------------------
 # Achievement
 # ---------------------------------------------------------------------------
@@ -601,3 +637,62 @@ def api_tick():
 if __name__ == "__main__":
     database.init_db()
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+@app.route('/api/stocks')
+def get_stocks():
+    """Restituisce le azioni con la variazione calcolata rispetto alla mezzanotte."""
+    check_and_update_base_price()
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT symbol, name, current_price, base_price FROM market")
+    rows = cur.fetchall()
+    conn.close()
+
+    stocks = []
+    for row in rows:
+        c_price = row['current_price']
+        b_price = row['base_price'] if row['base_price'] > 0 else c_price
+        
+        # Percentuale rispetto al prezzo di inizio giornata (mezzanotte)
+        pct_change = ((c_price - b_price) / b_price) * 100.0
+
+        stocks.append({
+            'symbol': row['symbol'],
+            'name': row['name'],
+            'price': c_price,
+            'base_price': b_price,
+            'change_percent': round(pct_change, 2)
+        })
+
+    return jsonify(stocks)
+
+@app.route('/api/stock_history/<symbol>')
+def get_stock_history(symbol):
+    """Restituisce lo storico dei prezzi per disegnare il grafico."""
+    conn = get_conn()
+    cur = conn.cursor()
+    
+    cur.execute("SELECT base_price FROM market WHERE symbol = ?", (symbol,))
+    stock_info = cur.fetchone()
+    base_price = stock_info['base_price'] if stock_info else 0.0
+
+    cur.execute("""
+        SELECT price, strftime('%H:%M:%S', timestamp) as time_label 
+        FROM stock_history 
+        WHERE symbol = ? 
+        ORDER BY id DESC LIMIT 50
+    """, (symbol,))
+    history = cur.fetchall()
+    conn.close()
+
+    history.reverse()
+
+    labels = [h['time_label'] for h in history]
+    prices = [h['price'] for h in history]
+
+    return jsonify({
+        'symbol': symbol,
+        'base_price': base_price,
+        'labels': labels,
+        'prices': prices
+    })
