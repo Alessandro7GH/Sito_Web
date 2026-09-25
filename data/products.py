@@ -1,110 +1,127 @@
-"""Catalogo prodotti di SOMETHING BANK.
+"""Catalogo prodotti di SOMETHING BANK (bilingue IT/EN).
 
-Ogni prodotto: id, name, price, description, category.
+Ogni prodotto: id, name/name_en, description/description_en, price, category.
 Le categorie "Oggetti inutili" e "Cose assurde" contano come "inutili"
-per gli achievement.
+per gli achievement. Le chiavi delle categorie restano in italiano (uso interno);
+le etichette tradotte sono in CATEGORY_LABELS.
 """
 
 USELESS_CATEGORIES = {"Oggetti inutili", "Cose assurde"}
 PROPERTY_CATEGORIES = {"Case"}
 
-CATEGORIES = [
-    "Cibo",
-    "Tecnologia",
-    "Vestiti",
-    "Auto",
-    "Case",
-    "Viaggi",
-    "Esperienze",
-    "Intrattenimento",
-    "Oggetti inutili",
-    "Aziende",
-    "Cose assurde",
-]
+# chiave interna -> etichette tradotte
+CATEGORY_LABELS = {
+    "Cibo": {"it": "Cibo", "en": "Food"},
+    "Tecnologia": {"it": "Tecnologia", "en": "Technology"},
+    "Vestiti": {"it": "Vestiti", "en": "Clothes"},
+    "Auto": {"it": "Auto", "en": "Cars"},
+    "Case": {"it": "Case", "en": "Houses"},
+    "Viaggi": {"it": "Viaggi", "en": "Travel"},
+    "Esperienze": {"it": "Esperienze", "en": "Experiences"},
+    "Intrattenimento": {"it": "Intrattenimento", "en": "Entertainment"},
+    "Oggetti inutili": {"it": "Oggetti inutili", "en": "Useless things"},
+    "Aziende": {"it": "Aziende", "en": "Businesses"},
+    "Cose assurde": {"it": "Cose assurde", "en": "Absurd things"},
+}
+
+CATEGORIES = list(CATEGORY_LABELS.keys())
+
+
+def _p(pid, it_name, en_name, price, it_desc, en_desc, category):
+    return {
+        "id": pid,
+        "name": it_name,
+        "name_en": en_name,
+        "price": price,
+        "description": it_desc,
+        "description_en": en_desc,
+        "category": category,
+    }
+
 
 PRODUCTS = [
-    # --- Cibo ---
-    {"id": "pizza", "name": "Pizza", "price": 8, "description": "Rotonda. Calda. Perfetta.", "category": "Cibo"},
-    {"id": "caffe", "name": "Caffè", "price": 2, "description": "Il carburante dell'umanità.", "category": "Cibo"},
-    {"id": "hamburger", "name": "Hamburger gigante", "price": 15, "description": "Non entrerà mai in bocca.", "category": "Cibo"},
-    {"id": "sushi", "name": "Sushi", "price": 45, "description": "Pesce crudo, prezzi cotti.", "category": "Cibo"},
-    {"id": "torta", "name": "Torta intera", "price": 30, "description": "Per te. Tutta per te.", "category": "Cibo"},
-    {"id": "cioccolato_oro", "name": "Cioccolato ricoperto d'oro", "price": 1200, "description": "Commestibile. Costoso. Discutibile.", "category": "Cibo"},
+    # --- Cibo / Food ---
+    _p("pizza", "Pizza", "Pizza", 8, "Rotonda. Calda. Perfetta.", "Round. Hot. Perfect.", "Cibo"),
+    _p("caffe", "Caffè", "Coffee", 2, "Il carburante dell'umanità.", "Humanity's fuel.", "Cibo"),
+    _p("hamburger", "Hamburger gigante", "Giant burger", 15, "Non entrerà mai in bocca.", "It will never fit in your mouth.", "Cibo"),
+    _p("sushi", "Sushi", "Sushi", 45, "Pesce crudo, prezzi cotti.", "Raw fish, cooked prices.", "Cibo"),
+    _p("torta", "Torta intera", "Whole cake", 30, "Per te. Tutta per te.", "For you. All of it.", "Cibo"),
+    _p("cioccolato_oro", "Cioccolato ricoperto d'oro", "Gold-covered chocolate", 1200, "Commestibile. Costoso. Discutibile.", "Edible. Expensive. Questionable.", "Cibo"),
 
-    # --- Tecnologia ---
-    {"id": "cuffie", "name": "Cuffie", "price": 80, "description": "Per non sentire il mondo.", "category": "Tecnologia"},
-    {"id": "smartphone", "name": "Smartphone", "price": 1000, "description": "Lo guarderai per 6 ore al giorno.", "category": "Tecnologia"},
-    {"id": "laptop", "name": "Laptop", "price": 1800, "description": "Per lavorare. Teoricamente.", "category": "Tecnologia"},
-    {"id": "tv", "name": "TV enorme", "price": 3500, "description": "Non entra in nessuna stanza.", "category": "Tecnologia"},
-    {"id": "drone", "name": "Drone", "price": 600, "description": "Lo perderai al primo volo.", "category": "Tecnologia"},
-    {"id": "robot", "name": "Robot domestico", "price": 25000, "description": "Ti giudicherà in silenzio.", "category": "Tecnologia"},
+    # --- Tecnologia / Technology ---
+    _p("cuffie", "Cuffie", "Headphones", 80, "Per non sentire il mondo.", "To not hear the world.", "Tecnologia"),
+    _p("smartphone", "Smartphone", "Smartphone", 1000, "Lo guarderai per 6 ore al giorno.", "You'll stare at it 6 hours a day.", "Tecnologia"),
+    _p("laptop", "Laptop", "Laptop", 1800, "Per lavorare. Teoricamente.", "For working. In theory.", "Tecnologia"),
+    _p("tv", "TV enorme", "Huge TV", 3500, "Non entra in nessuna stanza.", "Fits in no room.", "Tecnologia"),
+    _p("drone", "Drone", "Drone", 600, "Lo perderai al primo volo.", "You'll lose it on the first flight.", "Tecnologia"),
+    _p("robot", "Robot domestico", "Home robot", 25000, "Ti giudicherà in silenzio.", "It will judge you silently.", "Tecnologia"),
 
-    # --- Vestiti ---
-    {"id": "tshirt", "name": "T-shirt", "price": 25, "description": "Una maglietta. Rivoluzionario.", "category": "Vestiti"},
-    {"id": "scarpe", "name": "Scarpe da ginnastica", "price": 150, "description": "Per correre. O per stare fermi.", "category": "Vestiti"},
-    {"id": "giacca", "name": "Giacca elegante", "price": 400, "description": "Per sembrare importante.", "category": "Vestiti"},
-    {"id": "orologio", "name": "Orologio di lusso", "price": 12000, "description": "Dice l'ora. Come tutti gli altri.", "category": "Vestiti"},
-    {"id": "cappello", "name": "Cappello assurdo", "price": 90, "description": "Nessuno saprà perché.", "category": "Vestiti"},
+    # --- Vestiti / Clothes ---
+    _p("tshirt", "T-shirt", "T-shirt", 25, "Una maglietta. Rivoluzionario.", "A t-shirt. Revolutionary.", "Vestiti"),
+    _p("scarpe", "Scarpe da ginnastica", "Sneakers", 150, "Per correre. O per stare fermi.", "To run. Or to stand still.", "Vestiti"),
+    _p("giacca", "Giacca elegante", "Fancy jacket", 400, "Per sembrare importante.", "To look important.", "Vestiti"),
+    _p("orologio", "Orologio di lusso", "Luxury watch", 12000, "Dice l'ora. Come tutti gli altri.", "Tells time. Like all the others.", "Vestiti"),
+    _p("cappello", "Cappello assurdo", "Absurd hat", 90, "Nessuno saprà perché.", "Nobody will know why.", "Vestiti"),
 
-    # --- Auto ---
-    {"id": "bicicletta", "name": "Bicicletta", "price": 900, "description": "Ecologica. Faticosa.", "category": "Auto"},
-    {"id": "scooter", "name": "Scooter", "price": 3000, "description": "Veloce quanto basta.", "category": "Auto"},
-    {"id": "macchina", "name": "Macchina", "price": 30000, "description": "Quattro ruote e un sogno.", "category": "Auto"},
-    {"id": "suv", "name": "SUV", "price": 65000, "description": "Grande. Molto grande.", "category": "Auto"},
-    {"id": "supercar", "name": "Supercar", "price": 250000, "description": "Rossa. Ovviamente rossa.", "category": "Auto"},
-    {"id": "jet", "name": "Jet privato", "price": 15000000, "description": "Il traffico non esiste più.", "category": "Auto"},
+    # --- Auto / Cars ---
+    _p("bicicletta", "Bicicletta", "Bicycle", 900, "Ecologica. Faticosa.", "Eco-friendly. Tiring.", "Auto"),
+    _p("scooter", "Scooter", "Scooter", 3000, "Veloce quanto basta.", "Fast enough.", "Auto"),
+    _p("macchina", "Macchina", "Car", 30000, "Quattro ruote e un sogno.", "Four wheels and a dream.", "Auto"),
+    _p("suv", "SUV", "SUV", 65000, "Grande. Molto grande.", "Big. Very big.", "Auto"),
+    _p("supercar", "Supercar", "Supercar", 250000, "Rossa. Ovviamente rossa.", "Red. Obviously red.", "Auto"),
+    _p("jet", "Jet privato", "Private jet", 15000000, "Il traffico non esiste più.", "Traffic no longer exists.", "Auto"),
 
-    # --- Case ---
-    {"id": "monolocale", "name": "Monolocale", "price": 90000, "description": "Piccolo ma tuo.", "category": "Case"},
-    {"id": "casa", "name": "Casa", "price": 350000, "description": "Con giardino immaginario.", "category": "Case"},
-    {"id": "villa", "name": "Villa", "price": 2500000, "description": "Troppe stanze da pulire.", "category": "Case"},
-    {"id": "castello", "name": "Castello", "price": 12000000, "description": "Fantasmi inclusi.", "category": "Case"},
-    {"id": "isola", "name": "Isola", "price": 8000000, "description": "Nessun vicino. Mai.", "category": "Case"},
+    # --- Case / Houses ---
+    _p("monolocale", "Monolocale", "Studio flat", 90000, "Piccolo ma tuo.", "Small but yours.", "Case"),
+    _p("casa", "Casa", "House", 350000, "Con giardino immaginario.", "With an imaginary garden.", "Case"),
+    _p("villa", "Villa", "Villa", 2500000, "Troppe stanze da pulire.", "Too many rooms to clean.", "Case"),
+    _p("castello", "Castello", "Castle", 12000000, "Fantasmi inclusi.", "Ghosts included.", "Case"),
+    _p("isola", "Isola", "Island", 8000000, "Nessun vicino. Mai.", "No neighbours. Ever.", "Case"),
 
-    # --- Viaggi ---
-    {"id": "weekend", "name": "Weekend fuori", "price": 500, "description": "Due giorni di finta pace.", "category": "Viaggi"},
-    {"id": "vacanza", "name": "Vacanza di lusso", "price": 8000, "description": "Foto per far invidia.", "category": "Viaggi"},
-    {"id": "spazio", "name": "Viaggio nello spazio", "price": 500000, "description": "Sopra tutti. Letteralmente.", "category": "Viaggi"},
-    {"id": "giro_mondo", "name": "Giro del mondo", "price": 40000, "description": "Tornerai stanco uguale.", "category": "Viaggi"},
+    # --- Viaggi / Travel ---
+    _p("weekend", "Weekend fuori", "Weekend away", 500, "Due giorni di finta pace.", "Two days of fake peace.", "Viaggi"),
+    _p("vacanza", "Vacanza di lusso", "Luxury holiday", 8000, "Foto per far invidia.", "Photos to make people jealous.", "Viaggi"),
+    _p("spazio", "Viaggio nello spazio", "Space trip", 500000, "Sopra tutti. Letteralmente.", "Above everyone. Literally.", "Viaggi"),
+    _p("giro_mondo", "Giro del mondo", "Round-the-world trip", 40000, "Tornerai stanco uguale.", "You'll come back just as tired.", "Viaggi"),
 
-    # --- Esperienze ---
-    {"id": "concerto", "name": "Concerto in prima fila", "price": 300, "description": "Urlerai fino a perdere la voce.", "category": "Esperienze"},
-    {"id": "cena_stellata", "name": "Cena stellata", "price": 700, "description": "Piatti piccoli, conti enormi.", "category": "Esperienze"},
-    {"id": "corso_cucina", "name": "Corso di cucina", "price": 250, "description": "Brucerai comunque tutto.", "category": "Esperienze"},
-    {"id": "paracadute", "name": "Lancio col paracadute", "price": 350, "description": "Adrenalina e rimpianti.", "category": "Esperienze"},
+    # --- Esperienze / Experiences ---
+    _p("concerto", "Concerto in prima fila", "Front-row concert", 300, "Urlerai fino a perdere la voce.", "You'll scream until you lose your voice.", "Esperienze"),
+    _p("cena_stellata", "Cena stellata", "Michelin dinner", 700, "Piatti piccoli, conti enormi.", "Tiny plates, huge bills.", "Esperienze"),
+    _p("corso_cucina", "Corso di cucina", "Cooking class", 250, "Brucerai comunque tutto.", "You'll burn everything anyway.", "Esperienze"),
+    _p("paracadute", "Lancio col paracadute", "Skydiving jump", 350, "Adrenalina e rimpianti.", "Adrenaline and regrets.", "Esperienze"),
 
-    # --- Intrattenimento ---
-    {"id": "console", "name": "Console di gioco", "price": 500, "description": "Addio tempo libero.", "category": "Intrattenimento"},
-    {"id": "biliardo", "name": "Tavolo da biliardo", "price": 2000, "description": "Occuperà tutto il salotto.", "category": "Intrattenimento"},
-    {"id": "cinema_casa", "name": "Cinema in casa", "price": 15000, "description": "Popcorn non inclusi.", "category": "Intrattenimento"},
-    {"id": "parco_giochi", "name": "Parco giochi personale", "price": 400000, "description": "Solo per te. Vuoto.", "category": "Intrattenimento"},
+    # --- Intrattenimento / Entertainment ---
+    _p("console", "Console di gioco", "Game console", 500, "Addio tempo libero.", "Goodbye free time.", "Intrattenimento"),
+    _p("biliardo", "Tavolo da biliardo", "Pool table", 2000, "Occuperà tutto il salotto.", "It'll take up the whole living room.", "Intrattenimento"),
+    _p("cinema_casa", "Cinema in casa", "Home cinema", 15000, "Popcorn non inclusi.", "Popcorn not included.", "Intrattenimento"),
+    _p("parco_giochi", "Parco giochi personale", "Personal playground", 400000, "Solo per te. Vuoto.", "Just for you. Empty.", "Intrattenimento"),
 
-    # --- Oggetti inutili ---
-    {"id": "sasso", "name": "Un sasso", "price": 3, "description": "È un sasso.", "category": "Oggetti inutili"},
-    {"id": "sasso_migliore", "name": "Un sasso leggermente migliore", "price": 7, "description": "Leggermente migliore. Non chiedere.", "category": "Oggetti inutili"},
-    {"id": "scatola_vuota", "name": "Una scatola vuota", "price": 19, "description": "Contiene aria selezionata.", "category": "Oggetti inutili"},
-    {"id": "scatola_premium", "name": "Una scatola vuota premium", "price": 49, "description": "Aria premium.", "category": "Oggetti inutili"},
-    {"id": "pixel", "name": "Un pixel", "price": 1, "description": "Un singolo pixel. Tuo.", "category": "Oggetti inutili"},
-    {"id": "pixel_oro", "name": "Un pixel dorato", "price": 500, "description": "Lo stesso pixel, ma dorato.", "category": "Oggetti inutili"},
-    {"id": "foto_sasso", "name": "Una foto di un sasso", "price": 12, "description": "Non è nemmeno il sasso vero.", "category": "Oggetti inutili"},
-    {"id": "sedia_inutile", "name": "Una sedia che non puoi usare", "price": 250, "description": "Guardala e basta.", "category": "Oggetti inutili"},
-    {"id": "pulsante", "name": "Un pulsante", "price": 5, "description": "Non fa niente.", "category": "Oggetti inutili"},
-    {"id": "patata", "name": "Una patata", "price": 500, "description": "500 euro. Una patata.", "category": "Oggetti inutili"},
+    # --- Oggetti inutili / Useless things ---
+    _p("sasso", "Un sasso", "A rock", 3, "È un sasso.", "It's a rock.", "Oggetti inutili"),
+    _p("sasso_migliore", "Un sasso leggermente migliore", "A slightly better rock", 7, "Leggermente migliore. Non chiedere.", "Slightly better. Don't ask.", "Oggetti inutili"),
+    _p("scatola_vuota", "Una scatola vuota", "An empty box", 19, "Contiene aria selezionata.", "Contains selected air.", "Oggetti inutili"),
+    _p("scatola_premium", "Una scatola vuota premium", "A premium empty box", 49, "Aria premium.", "Premium air.", "Oggetti inutili"),
+    _p("pixel", "Un pixel", "A pixel", 1, "Un singolo pixel. Tuo.", "A single pixel. Yours.", "Oggetti inutili"),
+    _p("pixel_oro", "Un pixel dorato", "A golden pixel", 500, "Lo stesso pixel, ma dorato.", "The same pixel, but golden.", "Oggetti inutili"),
+    _p("foto_sasso", "Una foto di un sasso", "A photo of a rock", 12, "Non è nemmeno il sasso vero.", "It's not even the real rock.", "Oggetti inutili"),
+    _p("sedia_inutile", "Una sedia che non puoi usare", "A chair you can't use", 250, "Guardala e basta.", "Just look at it.", "Oggetti inutili"),
+    _p("pulsante", "Un pulsante", "A button", 5, "Non fa niente.", "It does nothing.", "Oggetti inutili"),
+    _p("patata", "Una patata", "A potato", 500, "500 euro. Una patata.", "500 euros. A potato.", "Oggetti inutili"),
 
-    # --- Aziende (mini-attività da collezione) ---
-    {"id": "chiosco_limonate", "name": "Chiosco di limonate", "price": 1500, "description": "Il tuo impero comincia qui.", "category": "Aziende"},
-    {"id": "food_truck", "name": "Food truck", "price": 45000, "description": "Cibo su ruote.", "category": "Aziende"},
-    {"id": "lavanderia", "name": "Lavanderia a gettoni", "price": 120000, "description": "Sorprendentemente redditizia.", "category": "Aziende"},
-    {"id": "fabbrica_calzini", "name": "Fabbrica di calzini spaiati", "price": 800000, "description": "Ne produce sempre uno solo.", "category": "Aziende"},
+    # --- Aziende / Businesses ---
+    _p("chiosco_limonate", "Chiosco di limonate", "Lemonade stand", 1500, "Il tuo impero comincia qui.", "Your empire starts here.", "Aziende"),
+    _p("food_truck", "Food truck", "Food truck", 45000, "Cibo su ruote.", "Food on wheels.", "Aziende"),
+    _p("lavanderia", "Lavanderia a gettoni", "Laundromat", 120000, "Sorprendentemente redditizia.", "Surprisingly profitable.", "Aziende"),
+    _p("fabbrica_calzini", "Fabbrica di calzini spaiati", "Odd-sock factory", 800000, "Ne produce sempre uno solo.", "It always makes just one.", "Aziende"),
 
-    # --- Cose assurde ---
-    {"id": "nome_stella", "name": "Il nome di una stella", "price": 60, "description": "Non è ufficiale. Non lo è mai.", "category": "Cose assurde"},
-    {"id": "nuvola", "name": "Una nuvola", "price": 9000, "description": "Certificato di proprietà incluso.", "category": "Cose assurde"},
-    {"id": "eco", "name": "Un'eco", "price": 200, "description": "Un'eco. Un'eco. Un'eco.", "category": "Cose assurde"},
-    {"id": "silenzio", "name": "Cinque minuti di silenzio", "price": 999, "description": "Estremamente rari.", "category": "Cose assurde"},
-    {"id": "buco", "name": "Un buco", "price": 400, "description": "Il nulla, in vendita.", "category": "Cose assurde"},
-    {"id": "mercoledi", "name": "La proprietà del mercoledì", "price": 1000000, "description": "Ogni mercoledì è tuo. Concettualmente.", "category": "Cose assurde"},
-    {"id": "urlo", "name": "Un urlo in scatola", "price": 75, "description": "Aprila e scappa.", "category": "Cose assurde"},
+    # --- Cose assurde / Absurd things ---
+    _p("nome_stella", "Il nome di una stella", "The name of a star", 60, "Non è ufficiale. Non lo è mai.", "It's not official. It never is.", "Cose assurde"),
+    _p("nuvola", "Una nuvola", "A cloud", 9000, "Certificato di proprietà incluso.", "Ownership certificate included.", "Cose assurde"),
+    _p("eco", "Un'eco", "An echo", 200, "Un'eco. Un'eco. Un'eco.", "An echo. An echo. An echo.", "Cose assurde"),
+    _p("silenzio", "Cinque minuti di silenzio", "Five minutes of silence", 999, "Estremamente rari.", "Extremely rare.", "Cose assurde"),
+    _p("buco", "Un buco", "A hole", 400, "Il nulla, in vendita.", "Nothingness, for sale.", "Cose assurde"),
+    _p("mercoledi", "La proprietà del mercoledì", "Ownership of Wednesday", 1000000, "Ogni mercoledì è tuo. Concettualmente.", "Every Wednesday is yours. Conceptually.", "Cose assurde"),
+    _p("urlo", "Un urlo in scatola", "A scream in a box", 75, "Aprila e scappa.", "Open it and run.", "Cose assurde"),
 ]
 
 PRODUCTS_BY_ID = {p["id"]: p for p in PRODUCTS}

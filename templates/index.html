@@ -8,28 +8,28 @@
 </head>
 <body data-page="index">
 
-  <!-- Schermata 1: Benvenuto / Nome -->
+  <button class="lang-toggle floating" id="lang-toggle" data-testid="lang-toggle">EN</button>
+
   <section id="welcome" class="screen center">
     <div class="welcome-inner fade-in">
-      <h1 class="huge">Benvenuto.</h1>
-      <p class="lead">Come ti chiami?</p>
+      <h1 class="huge" data-i18n="welcome_title">Benvenuto.</h1>
+      <p class="lead" data-i18n="ask_name">Come ti chiami?</p>
       <form id="name-form" class="name-form">
         <input id="name-input" type="text" autocomplete="off" maxlength="40"
-               placeholder="Il tuo nome" data-testid="name-input" />
-        <button type="submit" class="btn btn-primary" data-testid="continue-button">CONTINUA →</button>
+               data-i18n-ph="name_ph" placeholder="Il tuo nome" data-testid="name-input" />
+        <button type="submit" class="btn btn-primary" data-i18n="continue" data-testid="continue-button">CONTINUA →</button>
       </form>
       <p class="hint" id="name-error"></p>
     </div>
   </section>
 
-  <!-- Schermata 2: Sequenza di personalizzazione -->
   <section id="intro" class="screen center hidden">
     <div class="intro-inner">
       <p class="intro-line" id="intro-text"></p>
       <div id="intro-final" class="hidden">
         <h1 class="money-huge">€100.000</h1>
-        <p class="lead">Sono tutti tuoi.</p>
-        <button id="start-button" class="btn btn-primary" data-testid="start-button">INIZIA</button>
+        <p class="lead" data-i18n="all_yours">Sono tutti tuoi.</p>
+        <button id="start-button" class="btn btn-primary" data-i18n="start" data-testid="start-button">INIZIA</button>
       </div>
     </div>
   </section>

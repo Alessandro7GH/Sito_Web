@@ -5,89 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>INVESTI — SOMETHING BANK</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+</head>
 <body data-page="investments">
 
   <header class="topbar">
-    <a href="/bank" class="link-btn" data-testid="back-bank">← Indietro</a>
-    <div class="balance-pill" data-testid="inv-balance" id="inv-balance">€0</div>
+    <a href="/bank" class="link-btn" data-i18n="back" data-testid="back-bank">← Indietro</a>
+    <div class="topbar-right">
+      <button class="lang-toggle" id="lang-toggle" data-testid="lang-toggle">EN</button>
+      <div class="balance-pill" data-testid="inv-balance" id="inv-balance">€0</div>
+    </div>
   </header>
 
   <main class="container">
-    <h1 class="page-title fade-in">Investi</h1>
-    <p class="subtle">I prezzi si muovono da soli. Buona fortuna.</p>
-
+    <h1 class="page-title fade-in" data-i18n="invest_title">Investi</h1>
+    <p class="subtle" data-i18n="invest_sub">I prezzi si muovono da soli. Buona fortuna.</p>
     <div class="market-list" id="market-list" data-testid="market-list"></div>
-    <div style="background-color: #121418; padding: 20px; border-radius: 12px; border: 1px solid #2a2e39; margin-top: 20px;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-    <h3 id="chartTitle" style="color: #ffffff; margin: 0;">Andamento Azione</h3>
-    <span id="chartBasePrice" style="color: #888888; font-size: 0.9em;">Prezzo Base: -- €</span>
-  </div>
-  <canvas id="stockChart" height="250"></canvas>
-</div>
   </main>
 
   <div id="toast" class="toast hidden" data-testid="toast"></div>
   <div id="event-toast" class="event-toast hidden" data-testid="event-toast"></div>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
-  <script>
-let stockChart = null;
-
-function loadChart(symbol) {
-    fetch(`/api/stock_history/${symbol}`)
-        .then(response => response.json())
-        .then(data => {
-            const ctx = document.getElementById('stockChart').getContext('2d');
-            
-            document.getElementById('chartTitle').innerText = `Andamento ${data.symbol}`;
-            document.getElementById('chartBasePrice').innerText = `Prezzo Base Mezzanotte: €${data.base_price.toFixed(2)}`;
-
-            const lastPrice = data.prices[data.prices.length - 1] || data.base_price;
-            const lineColor = lastPrice >= data.base_price ? '#26a69a' : '#ef5350';
-
-            if (stockChart) {
-                stockChart.destroy();
-            }
-
-            stockChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Prezzo (€)',
-                        data: data.prices,
-                        borderColor: lineColor,
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        tension: 0.2,
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: { 
-                            ticks: { color: '#888888' },
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' } 
-                        },
-                        y: { 
-                            ticks: { color: '#888888' },
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' } 
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
-        });
-}
-
-loadChart('AAPL');
-setInterval(() => {
-    loadChart('AAPL');
-}, 15000);
-</script>
 </body>
 </html>

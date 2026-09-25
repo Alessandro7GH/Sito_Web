@@ -9,34 +9,37 @@
 <body data-page="portfolio">
 
   <header class="topbar">
-    <a href="/bank" class="link-btn" data-testid="back-bank">← Indietro</a>
-    <div class="brand small">SOMETHING BANK</div>
+    <a href="/bank" class="link-btn" data-i18n="back" data-testid="back-bank">← Indietro</a>
+    <div class="topbar-right">
+      <button class="lang-toggle" id="lang-toggle" data-testid="lang-toggle">EN</button>
+      <div class="brand small">SOMETHING BANK</div>
+    </div>
   </header>
 
   <main class="container">
-    <h1 class="page-title fade-in">Il tuo patrimonio</h1>
+    <h1 class="page-title fade-in" data-i18n="pf_title">Il tuo patrimonio</h1>
 
     <div class="wealth-rows" data-testid="wealth-rows">
-      <div class="wrow"><span>Contanti</span><b id="w-cash">€0</b></div>
-      <div class="wrow"><span>Azioni</span><b id="w-stocks">€0</b></div>
-      <div class="wrow"><span>Aziende</span><b id="w-companies">€0</b></div>
-      <div class="wrow"><span>Case</span><b id="w-property">€0</b></div>
-      <div class="wrow"><span>Oggetti</span><b id="w-objects">€0</b></div>
-      <div class="wrow"><span>Debiti</span><b id="w-debt" class="neg">€0</b></div>
+      <div class="wrow"><span data-i18n="cash">Contanti</span><b id="w-cash">€0</b></div>
+      <div class="wrow"><span data-i18n="stocks">Azioni</span><b id="w-stocks">€0</b></div>
+      <div class="wrow"><span data-i18n="companies">Aziende</span><b id="w-companies">€0</b></div>
+      <div class="wrow"><span data-i18n="houses">Case</span><b id="w-property">€0</b></div>
+      <div class="wrow"><span data-i18n="objects">Oggetti</span><b id="w-objects">€0</b></div>
+      <div class="wrow"><span data-i18n="debts">Debiti</span><b id="w-debt" class="neg">€0</b></div>
     </div>
 
     <div class="networth-block">
-      <p class="account-label">Patrimonio netto</p>
+      <p class="account-label" data-i18n="net_worth">Patrimonio netto</p>
       <h2 class="networth big" data-testid="pf-networth" id="pf-networth">€0,00</h2>
     </div>
 
     <section class="pf-section">
-      <h2 class="section-title">I tuoi oggetti</h2>
+      <h2 class="section-title" data-i18n="your_items">I tuoi oggetti</h2>
       <div class="items-wrap" id="items-wrap" data-testid="items-wrap"></div>
     </section>
 
     <section class="pf-section">
-      <h2 class="section-title">Achievement</h2>
+      <h2 class="section-title" data-i18n="achievements">Achievement</h2>
       <div class="ach-grid" id="ach-grid" data-testid="ach-grid"></div>
     </section>
   </main>
