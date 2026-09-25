@@ -1,3 +1,23 @@
+import random
+import time
+
+from flask import Flask, jsonify, render_template, request
+import database
+from data.companies import COMPANIES, COMPANIES_BY_ID
+from data.products import (
+    CATEGORIES,
+    CATEGORY_LABELS,
+    PRODUCTS,
+    PRODUCTS_BY_ID,
+    PROPERTY_CATEGORIES,
+    USELESS_CATEGORIES,
+)
+
+app = Flask(__name__)
+
+HISTORY_POINTS = 180   # punti storici inviati per azienda
+HISTORY_KEEP = 800     # punti conservati nel DB per azienda
+
 """Gestione database SQLite per SOMETHING BANK.
 
 Tabelle: users, transactions, inventory, investments, market,
@@ -155,33 +175,7 @@ def create_user(name):
 
 def get_user(conn, uid):
     return conn.execute("SELECT * FROM users WHERE id = ?", (uid,)).fetchone()
-app.py
-"""SOMETHING BANK — una web app ironica in stile Neal.fun (IT/EN).
 
-Backend: Python + Flask + SQLite (tutto in locale).
-Avvio:  python app.py   ->   http://127.0.0.1:5000
-"""
-
-import random
-import time
-
-from flask import Flask, jsonify, render_template, request
-
-import database
-from data.companies import COMPANIES, COMPANIES_BY_ID
-from data.products import (
-    CATEGORIES,
-    CATEGORY_LABELS,
-    PRODUCTS,
-    PRODUCTS_BY_ID,
-    PROPERTY_CATEGORIES,
-    USELESS_CATEGORIES,
-)
-
-app = Flask(__name__)
-
-HISTORY_POINTS = 180   # punti storici inviati per azienda
-HISTORY_KEEP = 800     # punti conservati nel DB per azienda
 
 
 def pick_lang(value):
