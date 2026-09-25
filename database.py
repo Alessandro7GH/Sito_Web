@@ -69,6 +69,12 @@ def init_db():
         )
     """)
 
+    # Controllo di sicurezza per aggiungere la colonna 'ts' alla tabella inventory se manca
+    try:
+        cur.execute("SELECT ts FROM inventory LIMIT 1")
+    except sqlite3.OperationalError:
+        cur.execute("ALTER TABLE inventory ADD COLUMN ts TIMESTAMP")
+
     # Controllo di sicurezza per la colonna 'ts' se la tabella stock_history esisteva già senza di essa
     try:
         cur.execute("SELECT ts FROM stock_history LIMIT 1")
